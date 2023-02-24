@@ -30,22 +30,21 @@ public class MyBankApp {
 		Customer robert = new Customer(1, "dupont", "robert", "robert.dupont@xmail.com");
 		Customer julie = new Customer(2, "jolie", "julie", "julie.jolie@xmail.com");
 		Current firstAccount = new Current(100200300, new Date(), 1500, 200, robert);
-		Saving secondAccount = new Saving(200300400, new Date(), 2000, 5.5, julie);	
+		Saving secondAccount = new Saving(200300400, new Date(), 2000, 5.5, julie);
 
 		bankJob.addAccount(firstAccount);
 		bankJob.addAccount(secondAccount);
-		
+
 		Scanner scan = new Scanner(System.in);
 		int choice = 0;
 		boolean door = false;
-
+		int valu = 0;
+		int amount = 0;
 		while (door == false) {
-
 			try {
 				System.out.println("Saisissez un numéro de compte bancaire valide:");
-				int valu = scan.nextInt();
-				if (bankJob.consultAccount(valu) != null){
-					System.out.println("toto");
+				valu = scan.nextInt();
+				if (bankJob.consultAccount(valu) != null) {
 					door = true;
 				}
 			} catch (InputMismatchException e) {
@@ -55,8 +54,8 @@ public class MyBankApp {
 		}
 
 		while (choice != 7) {
-
-			String[] appMenu = { "*************************************************************",
+			System.out.println(bankJob.consultAccount(valu).getBalance());
+			String[] appMenu = { "Compte: " + valu, "*************************************************************",
 					"*  1 - Versemant                                            *",
 					"*  2 - Retrait                                              *",
 					"*  3 - Virement                                             *",
@@ -73,7 +72,32 @@ public class MyBankApp {
 
 			switch (choice) {
 			case 1:
+				door = false;
 				System.out.println("Versemant ");
+				
+				while (door == false) {
+					try {
+						System.out.println("Indiquer la somme a versé sur le compte: ");
+						amount = scan.nextInt();
+						
+							door = true;
+						
+					} catch (InputMismatchException e) {
+						System.out.println("veuillez saisir un nombre");
+					}
+					scan.nextLine();
+				}
+
+				bankJob.pay(valu, amount);
+
+				System.out.println("*************************************************************"
+						+ "\n*               liste des transactions                      *"
+						+ "\n*************************************************************");
+				for (Transaction trans : bankJob.listTransactions(valu)) {
+					System.out.println(trans);
+				}
+				System.out.println();
+
 				break;
 
 			case 2:
